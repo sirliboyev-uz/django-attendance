@@ -84,12 +84,12 @@
 </head>
 <body>
 <div class="container">
-    <h2 class="heading">Employee Attendance Records</h2>
+    <h2 class="heading">Hodimlarning davomati</h2>
     <form method="get" class="filter-container">
         <div class="input-group">
-            <input type="text" name="search" class="form-control" placeholder="Search for employees..." value="{{ search_query }}">
+            <input type="text" name="search" class="form-control" placeholder="Hodimlarni qidirish..." value="{{ search_query }}">
             <div class="input-group-append">
-                <button class="btn btn-custom" type="submit"><i class="fas fa-search"></i> Search</button>
+                <button class="btn btn-custom" type="submit"><i class="fas fa-search"></i> Qidirish</button>
             </div>
         </div>
         <div class="input-group">
@@ -101,7 +101,7 @@
         <!-- Download Button -->
         <div class="input-group">
             <a href="?download_report=true&search={{ search_query }}&attendance_date={{ date_filter }}" class="btn btn-success">
-                <i class="fas fa-download"></i> Download Report
+                <i class="fas fa-download"></i> Hisobot
             </a>
         </div>
     </form>
@@ -111,13 +111,13 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>Emp Image</th>
-                    <th>Emp Name</th>
-                    <th>Emp ID</th>
-                    <th>Attendance Date</th>
-                    <th>Check-in Time</th>
-                    <th>Check-out Time</th>
-                    <th>Stayed Time</th>
+                    <th>Hodim rasmi</th>
+                    <th>FIO</th>
+                    <th>ID</th>
+                    <th>Davomat sanasi</th>
+                    <th>Kelish vaqti</th>
+                    <th>Ketish vaqti</th>
+                    <th>Umumiy ish vaqti</th>
                 </tr>
             </thead>
             <tbody>
@@ -138,21 +138,21 @@
                             {% if attendance.check_in_time %}
                                 {{ attendance.check_in_time|date:"h:i:s A" }}
                             {% else %}
-                                Not Checked In
+                                Hali kelmadi
                             {% endif %}
                         </td>
                         <td>
                             {% if attendance.check_out_time %}
                                 {{ attendance.check_out_time|date:"h:i:s A" }}
                             {% else %}
-                                Not Checked Out
+                                Hali ketmadi
                             {% endif %}
                         </td>
                         <td>
                             {% if attendance.check_in_time and attendance.check_out_time %}
                                 {{ attendance.calculate_duration }}
                             {% else %}
-                                Not Checked Out
+                                Hali ketmadi
                             {% endif %}
                         </td>
                     </tr>

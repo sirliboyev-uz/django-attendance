@@ -135,14 +135,14 @@
         <table>
             <thead>
                 <tr>
-                    <th>Employee ID</th>
-                    <th>Name</th>
+                    <th>ID</th>
+                    <th>FIO</th>
                     <th>Email</th>
-                    <th>Phone Number</th>
-                    <th>Designation</th>
-                    <th>Department</th>
-                    <th>Authorized</th>
-                    <th>Actions</th>
+                    <th>Telefon nomer</th>
+                    <th>Ish haqi(soatiga)</th>
+                    <th>Filial</th>
+                    <th>Aktiv</th>
+                    <th>Buyruqlar</th>
                 </tr>
             </thead>
             <tbody>
@@ -154,9 +154,9 @@
                     <td>{{ emp.phone_number }}</td>
                     <td>{{ emp.designation }}</td>
                     <td>{{ emp.department }}</td>
-                    <td>{% if emp.is_active  %} Yes {% else %} No {% endif %}</td>
+                    <td>{% if emp.is_active  %} Ha {% else %} Yoq {% endif %}</td>
                     <td class="actions">
-                        <a href="{% url 'emp-authorize' pk=emp.pk %}">View</a>
+                        <a href="{% url 'emp-authorize' pk=emp.pk %}">Ko'rish</a>
                     </td>
                 </tr>
                 {% endfor %}
