@@ -81,6 +81,12 @@ def recognize_faces(known_encodings, known_names, test_encodings, threshold=0.6)
 
 ######################################################################
 # View for registering an employee
+from django.core.files.storage import FileSystemStorage
+
+import os
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
+
 def register_employee(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -89,23 +95,32 @@ def register_employee(request):
         phone_number = request.POST.get('phone_number')
         designation = request.POST.get('designation')
         department = request.POST.get('department')
-        image_data = request.POST.get('image_data')
+        profile_picture = request.FILES.get('image_file')  # Retrieve the uploaded file
 
         # Check for duplicate employee ID
         if Employee.objects.filter(employee_id=employee_id).exists():
             messages.error(request, "An employee with this ID already exists.")
             return render(request, 'register_employee.html')
 
-        # Decode the base64 image data
-        profile_picture = None
-        if image_data:
-            try:
-                header, encoded = image_data.split(',', 1)
-                profile_picture = ContentFile(base64.b64decode(encoded), name=f"{employee_id}.jpg")
-            except Exception as e:
-                messages.error(request, "Error decoding image. Please try again.")
-                print(f"Error decoding image: {e}")
-                return render(request, 'register_employee.html')
+        # Validate and save the uploaded profile picture
+        saved_profile_picture_path = None
+        if profile_picture:
+            # Define the directory path for saving images
+            employees_directory = os.path.join(settings.MEDIA_ROOT, 'employees')
+
+            # Ensure the directory exists
+            os.makedirs(employees_directory, exist_ok=True)
+
+            # Create the file name using the employee ID
+            file_extension = os.path.splitext(profile_picture.name)[1]
+            profile_picture_name = f"{employee_id}{file_extension}"
+
+            # Define the full path for saving the file
+            saved_profile_picture_path = os.path.join('employees', profile_picture_name)
+
+            # Save the file using FileSystemStorage
+            fs = FileSystemStorage(location=employees_directory)
+            fs.save(profile_picture_name, profile_picture)
 
         # Create the Employee instance
         employee = Employee(
@@ -115,7 +130,7 @@ def register_employee(request):
             phone_number=phone_number,
             designation=designation,
             department=department,
-            profile_picture=profile_picture,  # Use profile_picture field
+            profile_picture=saved_profile_picture_path,  # Save relative path
             is_active=True  # Default to True, or customize as needed
         )
 
@@ -130,6 +145,8 @@ def register_employee(request):
             return render(request, 'register_employee.html')
 
     return render(request, 'register_employee.html')
+
+
 
 
 ######################################################################
