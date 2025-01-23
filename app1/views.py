@@ -173,7 +173,9 @@ def capture_and_recognize(request):
     def generate_frames(cam_config, stop_event):
         """Generator function to yield frames for streaming."""
         cap = None
+
         try:
+
             # Check if the camera source is a number (local webcam) or a string (IP camera URL)
             if cam_config.camera_source.isdigit():
                 cap = cv2.VideoCapture(int(cam_config.camera_source))  # Use integer index for webcam
@@ -248,6 +250,8 @@ def capture_and_recognize(request):
             error_messages.append(str(e))  # Capture error message
         finally:
             if cap is not None:
+                cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+
                 cap.release()
 
     try:
